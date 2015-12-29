@@ -3,9 +3,12 @@ package com.hason.study.spring_data_1.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +24,8 @@ public class Person implements Serializable{
 	private String lastName;
 	
 	private Date birthday;
+	
+	private Country country;
 
 	@Id
 	@GeneratedValue
@@ -31,6 +36,16 @@ public class Person implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	@ManyToOne
+	@JoinColumn(name = "country_id")
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
+	}
 
 	public String getEmail() {
 		return email;
@@ -40,6 +55,7 @@ public class Person implements Serializable{
 		this.email = email;
 	}
 
+	@Column(name = "last_name")
 	public String getLastName() {
 		return lastName;
 	}
