@@ -4,8 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +39,8 @@ import com.hason.study.spring_data_1.entity.Person;
  * 2、命名参数 + @param注解，如：:lastName、:email，方法的参数类型前加注解@Param("email") @Param("lastName")
 
  */
-public interface PersonRepository extends Repository<Person, Integer>{
+public interface PersonRepository extends
+		JpaRepository<Person, Integer>, JpaSpecificationExecutor<Person>, CustomRepository {
 
 	/**
 	 * 根据lastName，获取用户
