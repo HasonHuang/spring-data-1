@@ -235,7 +235,7 @@ public class SpringDataTest {
 	
 	
 	/**
-	 * 自定义Repository方法。（实际是一个适配器模式实现）
+	 * 自定义Repository方法。（类似适配器模式实现）
 	 * 1、定义一个自定义接口类
 	 * 2、被扩展的Repository继承（1）中的接口。（例如被扩展接口为PersonRepository）
 	 * 3、定义一个实现类。名字必须为 被扩展接口 + Impl，否则不能运行 ，如：PersonRepositoryImpl
@@ -245,9 +245,6 @@ public class SpringDataTest {
 	@Test
 	public void testCustomRepository() {
 		// 实际上会调用 PersonRepositoryImpl.findAllPerson();
-		// PersonRepositoryImpl是具有特有行为的被适配对象
-		// CustomRepository是适配器
-		// PersonRepository是具有通用行为的待适配对象
 		// client -> PersonRepository -> CustomRepository -> PersonRepositoryImpl
 		personRepository.findAllPerson();
 	}
