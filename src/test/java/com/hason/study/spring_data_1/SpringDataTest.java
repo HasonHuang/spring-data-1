@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.hason.study.spring_data_1.entity.Person;
+import com.hason.study.spring_data_1.repository.CountryRepository;
 import com.hason.study.spring_data_1.repository.PersonRepository;
 import com.hason.study.spring_data_1.service.PersonService;
 
@@ -235,9 +236,9 @@ public class SpringDataTest {
 	
 	
 	/**
-	 * 自定义Repository方法。（类似适配器模式实现）
-	 * 1、定义一个自定义接口类
-	 * 2、被扩展的Repository继承（1）中的接口。（例如被扩展接口为PersonRepository）
+	 * 为某一个Repository自定义方法。（类似适配器模式实现）
+	 * 1、定义一个自定义接口类（如：CustomRepository）
+	 * 2、被扩展的Repository 继承（1）中的接口。（例如被扩展接口为PersonRepository）
 	 * 3、定义一个实现类。名字必须为 被扩展接口 + Impl，否则不能运行 ，如：PersonRepositoryImpl
 	 * 注意：默认情况下，Spring Data 会在base-package中查找"接口名Impl"作为实现类；
 	 *      <jpa:repositories > 提供了一个 repository-impl-postfix 属性，用以指定实现类的后缀
@@ -247,5 +248,16 @@ public class SpringDataTest {
 		// 实际上会调用 PersonRepositoryImpl.findAllPerson();
 		// client -> PersonRepository -> CustomRepository -> PersonRepositoryImpl
 		personRepository.findAllPerson();
+	}
+	
+	/**
+	 * 自定义全局Repository
+	 * 
+	 */
+	@Test
+	public void testGlobalCustomRepository() {
+		ApplicationContext context2 = new ClassPathXmlApplicationContext("classpath:/base-dao/applicationContext.xml");
+		CountryRepository countryRepository = context2.getBean(CountryRepository.class);
+		countryRepository.testGlobalRepositoryCustom();
 	}
 }

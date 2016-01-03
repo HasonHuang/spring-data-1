@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+     
+     <!-- 自动扫描被注解的类，注册成Spring Bean -->
+     <context:component-scan base-package="com.hason.study.spring_data_1"></context:component-scan>
+
+
+	<!-- 第一步：配置数据源 -->
+	<context:property-placeholder location="application.properties" />
+
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+		<!-- 数据库连接 -->
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 连接池 -->
+		<property name="maxActive" value="5" />
+		<property name="maxIdle" value="3" />
+		<property name="minIdle" value="1" />
+		<property name="defaultAutoCommit" value="false" />
+	</bean>
+
+	<!-- 第二步：配置实体管理工厂 -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置 JPA 提供商的适配器。可以通过内部 bean 的方式来配置 -->
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
+		</property>
+		<!-- 配置实体类所在的包 -->
+		<property name="packagesToScan" value="com.hason.study.spring_data_1.entity" />
+		<!-- 配置 JPA 的基本属性，例如 JPA 实现产品的属性 -->
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+
+	</bean>
+
+	<!-- 第三步：配置事务管理 -->
+	<!-- 配置 JPA 使用的事务管理 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
+	</bean>
+	<!-- 开启注解事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 第四步：配置Spring Data -->
+	<!-- 先添加jpa命名空间 -->
+	<!-- base-package：启用扫描目录下的Repository并自动创建代理的功能 -->
+	<jpa:repositories base-package="com.hason.study.spring_data_1.repository" 
+		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager"
+		factory-class="/spring-data-1/src/main/java/com/hason/study/spring_data_1/repository/global/BaseDaoRepositoryFactoryBean.java" />
+
+</beans>
