@@ -65,6 +65,7 @@
 	<!-- 先添加jpa命名空间 -->
 	<!-- base-package：启用扫描目录下的Repository并自动创建代理的功能 -->
 	<jpa:repositories base-package="com.hason.study.spring_data_1.repository" 
-		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
+		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager"
+		factory-class="com.hason.study.spring_data_1.repository.global.BaseDaoRepositoryFactoryBean" />
 
 </beans>
